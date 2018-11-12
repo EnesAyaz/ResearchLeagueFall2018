@@ -17,6 +17,8 @@ fsw = 3e6;
 Lp = 1e-10;
 LdcP = 5e-9;
 LdcN = 5e-9;
+Ls=42e-12;
+Ld=450e-12;
 
 %% Allocation
 t = (0 : SampleTime : StopTime);
@@ -47,13 +49,13 @@ Iload = zeros(size(t)); %Load Current
 %% Calculation
 [~,n] = size(t);
 for k=3:n
-    Vload(k) = ;
-    u2B(k) = Vload(k); %- Lp*(x1B(k-1) - x1B(k-2))/SampleTime;
-    u2T(k) = u(k) - Vload(k);% - (LdcP + LdcN + Lp)*(x1T(k-1) - x1T(k-2))/SampleTime;
+    Vload(k) = (1/((Ls+Ld)))*(x1B(k-1)-x1B(k-2))/SampleTime+ x3B(k-1);
+    u2T(k) = u(k) - Vload(k);
     [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
     Iload(k)= Iload(k-1)+ ((1/Lload)*Vload(k)*SampleTime);
     x1B(k)=x1T(k)-Iload(k);
-    [x7B(k),x4B(k),x3B(k)] = StateSpaceGaNBlockBottom(u1B(k),u2B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+    [x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+
    
 end
 profile off
