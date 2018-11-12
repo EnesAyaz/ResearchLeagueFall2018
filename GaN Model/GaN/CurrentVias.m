@@ -14,15 +14,15 @@ Rd = (3.6/8) * (0.95*0.82*(1 - (-0.0135*(125 - 25))) * 18.2 / 295);
 %%
 [u1T, u1B] = PulseTimer(t,fsw,SampleTime);
 %%
-u1B=6*ones(size(t));
 a=length(t);
-x1B = linspace(0,5,10) ;%Ids
-x1B1=5*ones(1,a-10);
+x1B = linspace(0,-5,10000) ;%Ids
+x1B1=-5*ones(1,a-10000);
 x1B=[x1B x1B1];
 x3B = zeros(size(t)); %Vdsin
 x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
 u2B = zeros(size(t)); %Vdso
+u1B= zeros(size(t)); %Vgso
 x8=zeros(size(t)); %%Ich
 
 %%
@@ -71,7 +71,7 @@ legend ('U1');
 hold off
 
 
-figure(5);
+figure(6);
 hold all
 grid on
 plot(t,x8,'Linewidth',2.0);
