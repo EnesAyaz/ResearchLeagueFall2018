@@ -3,7 +3,7 @@ clc;
 clear all;
 close all;
 %% Simulation Parameters
-SampleTime = 1e-13; %Time Steps
+SampleTime = 1e-12; %Time Steps
 StopTime = 1000e-9; %Stop Time
 fsw = 3e6;
 t = (0 : SampleTime : StopTime);
@@ -24,7 +24,7 @@ x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
 u2B = zeros(size(t)); %Vdso
 % u1B= zeros(size(t)); %Vgso
-% u1B= 3*ones(size(t)); %Vgso
+u1B= -3*ones(size(t)); %Vgso
 x8=zeros(size(t)); %%Ich
 
 %%
