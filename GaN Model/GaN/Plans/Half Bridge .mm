@@ -1,0 +1,13 @@
+<map version="1.0.1">
+<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
+<node CREATED="1543149685729" ID="ID_1963173619" MODIFIED="1543149697180" TEXT="Half Bridge ">
+<node CREATED="1543149699609" ID="ID_204969328" MODIFIED="1543149731542" POSITION="right" STYLE="bubble" TEXT="Bottom Transistor">
+<node CREATED="1543149777176" ID="ID_608016793" MODIFIED="1543149782136" TEXT="Voltage Bias"/>
+<node CREATED="1543149784197" ID="ID_1337253740" MODIFIED="1543149789015" TEXT="Current Bias"/>
+</node>
+<node CREATED="1543149700917" ID="ID_813085289" MODIFIED="1543149727934" POSITION="left" STYLE="bubble" TEXT="Top Transistor">
+<node CREATED="1543149752893" ID="ID_1085075991" MODIFIED="1543149761684" TEXT="Voltage Bias"/>
+<node CREATED="1543149762817" ID="ID_1835782458" MODIFIED="1543149770412" TEXT="Current Bias"/>
+</node>
+</node>
+</map>
