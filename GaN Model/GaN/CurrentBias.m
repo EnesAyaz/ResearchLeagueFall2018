@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 %% Simulation Parameters
-SampleTime = 1e-12; %Time Steps
+SampleTime = 1e-13; %Time Steps
 StopTime = 1000e-9; %Stop Time
 fsw = 3e6;
 t = (0 : SampleTime : StopTime);
@@ -21,10 +21,12 @@ u2CB=[u2CB u2B1]; % Ids
 x3B = zeros(size(t)); %Vdsin
 x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
-%%u1B= zeros(size(t)); %Vgso
 Vdsout = zeros(size(t));
-%%u1B= 3*ones(size(t)); %Vgso
 x8=zeros(size(t)); %%Ich
+%u1B= zeros(size(t)); %Vgso
+%%u1B= 3*ones(size(t)); %Vgso
+% u1B(t>50e-9)=-3;
+%u1B(t>=200e-9) = -3;
 
 %%
 [~,n] = size(t);
@@ -35,49 +37,41 @@ for k=3:n
      
 end
 %%
-figure(1);
+figure ;
+
+subplot(2,2,1);
 hold all
 grid on
-plot(t,u2CB,t,Vdsout'Linewidth',2.0);
-legend ('Ids','Vbias');
+plot(t,u2CB','Linewidth',2.0);
+title('Ids')
+legend ('Ids');
 hold off
 
-figure(2);
+
+subplot(2,2,2);
 hold all
 grid on
-plot(t,Vdsout,'Linewidth',2.0);
-legend ('Vbias');
+plot(t,x4B,t,x7B,t,u1B,'Linewidth',2.0);
+title('Vgsin,Vgsout and Ig')
+legend ('Vgs','Ig','Vgsout');
 hold off
 
-figure(3);
-hold all
-grid on
-plot(t,x4B,t,x7B,'Linewidth',2.0);
-legend ('Vgs','Ig');
-hold off
-
-figure(4);
+subplot(2,2,3);
 hold all
 grid on
 plot(t,x3B,'Linewidth',2.0);
-legend ('Vds');
+legend ('Vdsin');
 hold off
 
 
-figure(5);
+
+subplot(2,2,4);
 hold all
 grid on
-plot(t,u1B,'Linewidth',2.0);
-legend ('U1');
+plot(t,x8,'Linewidth',2.0);
+legend ('Ich');
 hold off
 
-
-figure(6);
-hold all
-grid on
-plot(t,x8,t,u1B,t,x3B,'Linewidth',2.0);
-legend ('Ich','Vgs','Vdsin');
-hold off
-
+suptitle(' Vgs switching and Ids negative');
 
 
