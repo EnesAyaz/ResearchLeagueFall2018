@@ -4,8 +4,6 @@
 % clear all;
 % close all;
 
-profile on %open the profiler 
-tic % stop watch timer 
 %% GaN Parameters
 Rgin = 1.5;
 Lgin = 0.65e-9;
@@ -45,9 +43,10 @@ B = zeros(size(4,3));
 CurrVect = zeros(size(4,1));
 NextVect = zeros(size(3,1));
 %% Input Definition
-u1(t>=50e-9) = 6;
-u2(t>=0e-9) = 2;
-%u1(t>=200e-9) = -3;
+u1(t>50e-9)=-3;
+u1(t>=150e-9) = 6;
+u2(t>=0e-9) = -2;
+u1(t>=250e-9) = -3;
 % u1(t>=400e-9) = 6;
 % u2(t>=200e-9) = 0;
 x3 = u2(1);
@@ -105,21 +104,43 @@ for k = 2:n-1
     x3 = NextVect(4,1);
 
 end
-toc
-profile off
-profile viewer
+
 
 %%
-figure;
+
+figure; 
 hold all
-grid on
-plot(t,x1,t,u2,t,x7,t,u1,'Linewidth',2.0);
-%xlim([0]);
-ylim([-80 200]);
-xlabel('Time');
-ylabel('Voltage,Ampere');
-title({'Ids, Vds, Ig, Vgs OUT'})
-legend ('Ids','Vds','Ig','Vgs','Location','best');
-hold off
-%%
+grid on;
+subplot(2,2,1);
 
+plot(t,x1,'LineWidth',3);
+xlabel('Time');
+ylabel('Ampere');
+title('Ids');
+
+subplot(2,2,2);
+
+plot(t,u2,'LineWidth',3);
+xlabel('Time');
+ylabel('voltage');
+title('Vds');
+
+
+subplot(2,2,3);
+
+plot(t,x7,'LineWidth',3);
+xlabel('Time');
+ylabel('Current');
+title('Ig');
+
+subplot(2,2,4);
+
+plot(t,u1,'LineWidth',3);
+xlabel('Time');
+ylabel('Voltage');
+title('Vgs');
+
+
+suptitle('Vgs Switching and Vds negative');
+
+hold off
