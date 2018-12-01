@@ -54,20 +54,19 @@ x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
 % u1B = zeros(size(t)); %Vgsso
 u2B = zeros(size(t)); %Vdso
-u1B= zeros(size(t));
+% u1B= zeros(size(t));
 
 %% Calculation
 [~,n] = size(t);
 for k=3:(n-3)
     u2T(k)= u(k)-Vload(k);
     [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
-    u2T(k+1)= x3T(k)+ ((x1T(k)- x1T(k-1))*(Ls+Ld)/SampleTime) +(x1T(k)* (Rs+Rd));
-    Vload(k+1) = u2T(k+1)- u2B(k);
-    Iload(k)= ((Iload(k-1)*Lload)+(Vload(k+1)*SampleTime))/( SampleTime*Rload+ Lload);
-    x1B(k)= x1T(k)-Iload(k);
-    [x7B(k),x4B(k),x3B(k)] = CurrentBlock(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
-    u2B(k+1)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
-    Vload(k+1)=u2B(k+1);
+    Vload(k+1)= (x1T(k)- x1T(k-1))*(Lload)/SampleTime + x1T(k)* (Rload);
+    
+%     x1B(k)= x1T(k)-Iload(k);
+%     [x7B(k),x4B(k),x3B(k)] = CurrentBlock(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+%     u2B(k+1)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
+%     Vload(k+1)=u2B(k+1);
    
 end
 
@@ -85,7 +84,7 @@ ylabel('Voltage,Ampere');
 title({'Top Switch Ids, Vds, Ig, Vgs'})
 legend ('Ids','Vds','Ig','Vgs','Location','best');
 hold off
-
+%{
 figure;
 hold all
 grid on
@@ -109,4 +108,4 @@ ylabel('Voltage,Ampere');
 title({'Bottom Switch Ids, Vds, Ig, Vgs'})
 legend ('IdsB','IdsT','Il','Vgs','Location','best');
 hold off
-
+%}
