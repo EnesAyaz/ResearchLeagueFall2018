@@ -1,0 +1,12 @@
+clc;
+clear;
+Vgg=6;
+Rgg=3;
+Vth=1.5;
+Ron=6;
+Cds=9*10^-12;
+Cgs=1*10^-12;
+Vdd=2;
+Lload=1*10^-6;
+Rload=100;
+Rrc=10000;
