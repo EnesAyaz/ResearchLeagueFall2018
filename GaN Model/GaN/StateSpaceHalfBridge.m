@@ -6,10 +6,10 @@
 
 %% Simulation Parameters
 SampleTime = 1e-13; %Time Steps
-StopTime = 1000e-9; %Stop Time
+StopTime = 100e-9; %Stop Time
 
 %% Load Parameters
-Rload = 10;
+Rload = 10e4;
 Lload = 40e-6;
 fsw = 3e6;
 Lp = 1e-10;
@@ -45,7 +45,6 @@ u2T = zeros(size(t)); %Vdso
 u = 100*ones(size(t)); %Vdc
 Vload = zeros(size(t)); %Load Voltage
 Iload = zeros(size(t)); %Load Current
-Id=zeros(size(t)); %Diode Current
 
 %% Bottom
 x1B = zeros(size(t)); %Ids
@@ -54,19 +53,21 @@ x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
 % u1B = zeros(size(t)); %Vgsso
 u2B = zeros(size(t)); %Vdso
-% u1B= zeros(size(t));
+x8=zeros(size(t)); %%Ich
+u1B= zeros(size(t));
 
 %% Calculation
 [~,n] = size(t);
 for k=3:(n-3)
-    u2T(k)= u(k)-Vload(k);
+    u2T(k)= u(k)-u2B(k-1);
     [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
-    Vload(k+1)= (x1T(k)- x1T(k-1))*(Lload)/SampleTime + x1T(k)* (Rload);
-    
-%     x1B(k)= x1T(k)-Iload(k);
-%     [x7B(k),x4B(k),x3B(k)] = CurrentBlock(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
-%     u2B(k+1)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
-%     Vload(k+1)=u2B(k+1);
+    u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
+    Vload(k)=u(k)-u2T(k);
+    Iload(k)= (SampleTime*Vload(k)+ Lload*Iload(k-1))/(SampleTime*Rload+Lload);
+    x1B(k)=x1T(k)-Iload(k);
+    [x8(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+    u2B(k)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
+   
    
 end
 
@@ -76,36 +77,49 @@ end
 figure;
 hold all
 grid on
-plot(t,x1T,t,u2T,t,x7T,t,u1T,'Linewidth',2.0);
+plot(t,x1T,'Linewidth',2.0);
 %xlim([0]);
-ylim([-50 120]);
+%ylim([-50 120]);
 xlabel('Time');
 ylabel('Voltage,Ampere');
-title({'Top Switch Ids, Vds, Ig, Vgs'})
-legend ('Ids','Vds','Ig','Vgs','Location','best');
-hold off
-%{
-figure;
-hold all
-grid on
-plot(t,x1B,t,u2B,t,x7B,t,u1B,'Linewidth',2.0);
-%xlim([0]);
-ylim([-50 120]);
-xlabel('Time');
-ylabel('Voltage,Ampere');
-title({'Bottom Switch Ids, Vds, Ig, Vgs'})
-legend ('Ids','Vds','Ig','Vgs','Location','best');
+title({'Top Switch Ids, Vds '})
+legend ('IdsT','VdsT','Location','best');
 hold off
 
-figure;
-hold all
-grid on
-plot(t,x1B,t,x1T,t,Iload,'Linewidth',2.0);
-%xlim([0]);
-ylim([-50 120]);
-xlabel('Time');
-ylabel('Voltage,Ampere');
-title({'Bottom Switch Ids, Vds, Ig, Vgs'})
-legend ('IdsB','IdsT','Il','Vgs','Location','best');
-hold off
-%}
+% figure;
+% hold all
+% grid on
+% plot(t,u2B,'Linewidth',2.0);
+% %xlim([0]);
+% %ylim([-50 120]);
+% xlabel('Time');
+% ylabel('Voltage,Ampere');
+% title({'Bottom Switch Ids, Vds '})
+% legend ('IdsB','VdsB','Location','best');
+% hold off
+
+
+% figure;
+% hold all
+% grid on
+% plot(t,x1B,t,u2B,t,x7B,t,u1B,'Linewidth',2.0);
+% %xlim([0]);
+% ylim([-50 120]);
+% xlabel('Time');
+% ylabel('Voltage,Ampere');
+% title({'Bottom Switch Ids, Vds, Ig, Vgs'})
+% legend ('Ids','Vds','Ig','Vgs','Location','best');
+% hold off
+% 
+% figure;
+% hold all
+% grid on
+% plot(t,x1B,t,x1T,t,Iload,'Linewidth',2.0);
+% %xlim([0]);
+% ylim([-50 120]);
+% xlabel('Time');
+% ylabel('Voltage,Ampere');
+% title({'Bottom Switch Ids, Vds, Ig, Vgs'})
+% legend ('IdsB','IdsT','Il','Vgs','Location','best');
+% hold off
+

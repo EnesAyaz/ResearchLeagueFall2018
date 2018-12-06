@@ -43,9 +43,9 @@ B = zeros(size(4,3));
 CurrVect = zeros(size(4,1));
 NextVect = zeros(size(3,1));
 %% Input Definition
-u1(t>50e-9)=-3;
+u1(t>50e-9)=6;
 u1(t>=150e-9) = 6;
-u2(t>=0e-9) = -2;
+u2(t>=0e-9) = -8;
 u1(t>=250e-9) = -3;
 % u1(t>=400e-9) = 6;
 % u2(t>=200e-9) = 0;

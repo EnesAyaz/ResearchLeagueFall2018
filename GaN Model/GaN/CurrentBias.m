@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 %% Simulation Parameters
-SampleTime = 1e-13; %Time Steps
+SampleTime = 1e-12; %Time Steps
 StopTime = 1000e-9; %Stop Time
 fsw = 3e6;
 t = (0 : SampleTime : StopTime);
