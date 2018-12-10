@@ -5,12 +5,12 @@ clear all;
 close all;
 
 %% Simulation Parameters
-SampleTime = 1e-15; %Time Steps
+SampleTime = 1e-13; %Time Steps
 StopTime = 400e-9; %Stop Time
 
 %% Load Parameters
 Rload = 100;
-Lload = 4-6;
+Lload = 4e-6;
 Cload=1e-12;
 fsw = 3e6;
 Lp = 1e-10;
@@ -46,7 +46,9 @@ x7T = zeros(size(t)); %Ig
 % u1T = zeros(size(t)); %Vgsso
 u2T = zeros(size(t)); %Vdso
 
-u = linspace(0,100,length(t));%Vdc
+% u = linspace(0,1,10000);%Vdc
+% u=[u, 1*ones(1,length(t-10000))];
+u= 100*ones(size(t));
 Vload = zeros(size(t)); %Load Voltage
 Iload = zeros(size(t)); %Load Current
 
@@ -63,34 +65,53 @@ x8=zeros(size(t)); %%Ich
 %% Calculation
 [~,n] = size(t);
 for k=3:(n-3)
-%     u2T(k)= u(k)-u2B(k-1);
-     u2T(k)=u(k)-u2B(k-1);
-%      u2T(k)=u(k);
+  u2T(k)= u(k)- u2B(k-1);
+  [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
+  u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
+  Vload(k)=u(k)-u2T(k);
+  Iload(k)= ((Iload(k-1))*(Lload/SampleTime)+ Vload(k))/( Rload+ Lload/SampleTime);
+  
+  x1B(k)=x1T(k)-Iload(k);
+  [x8(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+  u2B(k)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
+  
+  
 
-     [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
-     
-         u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
-    Vload(k)=u(k)-u2T(k);
-    Iload(k)= (SampleTime*Vload(k)/Lload+ Iload(k-1))/(((SampleTime*Rload)/Lload)+1);
-    x1B(k)=x1T(k)-Iload(k);
-    [x8(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
-    u2B(k)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
+end
+%%
+%      [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
+%      
+%          u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
+%     Vload(k)=u(k)-u2T(k);
+%     Iload(k)= (SampleTime*Vload(k)/Lload+ Iload(k-1))/(((SampleTime*Rload)/Lload)+1);
+%     x1B(k)=x1T(k)-Iload(k);
+%     [x8(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+%     u2B(k)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
 
-     
+ %%    
 %      Vload(k)=Vload(k-1)+ (x1T(k)*SampleTime)/Cload;
     
     
     % Vload(k)=((Lload*(x1T(k)-x1T(k-1))/SampleTime) + ((Lload/Rload)*Vload(k-1)))/ (1+Lload/Rload);
     
-end
     %% voltage
 %     Iload(k)=x1T(k)-x1B(k-1);
 %     Vload(k)= Iload(k)*Rload+ ((Iload(k)-Iload(k-1))*Lload)/SampleTime;
 %     u2B(k)=Vload(k);
 %     [x1B(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGaNBlock(u1B(k),u2B(k),x1B(k-1),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
     
-    %% current
-   
+    %% voltage
+    
+%    u2T(k)= u(k)-u2B(k-1);
+%         u2T(k)=u(k)-u2B(k-1);
+% %       u2T(k)=u(k);
+%         [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
+%         u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
+%         u2B(k)=u(k)-u2T(k);
+%         [x1B(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGaNBlock(u1B(k),u2B(k),x1B(k-1),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
+%         Iload(k)=x1T(k)-x1B(k);
+%         Vload(k)= Iload(k)*Rload+ ((Iload(k)-Iload(k-1))*Lload)/SampleTime;
+%         u2B(k)=Vload(k);
    
 
 
@@ -121,13 +142,24 @@ end
 % legend ('IdsB','VdsB','Location','best');
 % hold off
 
-
+%%
 figure;
 hold on;
 plot(t,x1T,t,u2T,t,Vload','Linewidth',2.0);
 legend ('IdsT','VdsT','Vload');
 
 hold off
+
+
+%%
+
+figure;
+hold on;
+plot(t,Iload','Linewidth',2.0);
+legend ('Iload');
+
+hold off
+%%
 
 % figure;
 % hold all
