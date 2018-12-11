@@ -12,12 +12,13 @@ Ld=450e-12;
 Rs = 3.6 * 0.238 * 0.82 * (1 - (-0.0135*(125 - 25))) / 295;
 Rd = (3.6/8) * (0.95*0.82*(1 - (-0.0135*(125 - 25))) * 18.2 / 295);
 %%
-[u1T, u1B] = PulseTimer(t,fsw,SampleTime);
+[u1B, u1T] = PulseTimer(t,fsw,SampleTime);
 %%
 a=length(t);
-u2CB = linspace(0,-3,10000) ;%Ids
-u2B1=-3*ones(1,a-10000);
+u2CB = linspace(30,0,100) ;%Ids
+u2B1=zeros(1,a-100);
 u2CB=[u2CB u2B1]; % Ids
+% u2CB=zeros(size(t));
 x3B = zeros(size(t)); %Vdsin
 x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig

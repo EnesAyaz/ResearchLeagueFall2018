@@ -5,7 +5,7 @@ clear all;
 close all;
 
 %% Simulation Parameters
-SampleTime = 1e-13; %Time Steps
+SampleTime = 1e-12; %Time Steps
 StopTime = 400e-9; %Stop Time
 
 %% Load Parameters
@@ -41,7 +41,7 @@ t = (0 : SampleTime : StopTime);
 
 x1T = zeros(size(t)); %Ids
 x3T = zeros(size(t)); %Vdsin
-x4T = zeros(size(t)); %Vgsin
+x4T =-3*ones(size(t)); %Vgsin
 x7T = zeros(size(t)); %Ig
 % u1T = zeros(size(t)); %Vgsso
 u2T = zeros(size(t)); %Vdso
@@ -54,8 +54,8 @@ Iload = zeros(size(t)); %Load Current
 
 %% Bottom
 x1B = zeros(size(t)); %Ids
-x3B = zeros(size(t)); %Vdsin
-x4B = zeros(size(t)); %Vgsin
+x3B = ones(size(t)); %Vdsin
+x4B = -3*ones(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
 % u1B = zeros(size(t)); %Vgsso
 u2B = zeros(size(t)); %Vdso
@@ -67,13 +67,11 @@ x8=zeros(size(t)); %%Ich
 for k=3:(n-3)
   u2T(k)= u(k)- u2B(k-1);
   [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
-  u2T(k)= (x1T(k)*(Rd+Rs) )+ (((x1T(k)-x1T(k-1))/SampleTime)*(Ls+Ld))+ x3T(k);
-  Vload(k)=u(k)-u2T(k);
-  Iload(k)= ((Iload(k-1))*(Lload/SampleTime)+ Vload(k))/( Rload+ Lload/SampleTime);
-  
-  x1B(k)=x1T(k)-Iload(k);
+  x1B(k)=x1T(k)-Iload(k-1);
   [x8(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGanCurrentInput(u1B(k),x1B(k),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
   u2B(k)= x3B(k)+ (x1B(k)- x1B(k-1))*(Ls+Ld)/SampleTime + x1B(k)* (Rs+Rd);
+  Iload(k)= ((Iload(k-1))*(Lload/SampleTime)+ u2B(k))/( Rload+ Lload/SampleTime);
+  Vload(k)=u2B(k);
   
   
 
@@ -155,21 +153,21 @@ hold off
 
 figure;
 hold on;
-plot(t,Iload','Linewidth',2.0);
-legend ('Iload');
+plot(t, u2T,'Linewidth',2.0);
+legend ('u2');
 
 hold off
 %%
 
-% figure;
-% hold all
-% grid on
-% plot(t,x1B,t,x1T,t,Iload,'Linewidth',2.0);
-% %xlim([0]);
-% ylim([-50 120]);
-% xlabel('Time');
-% ylabel('Voltage,Ampere');
-% title({'Bottom Switch Ids, Vds, Ig, Vgs'})
-% legend ('IdsB','IdsT','Il','Vgs','Location','best');
-% hold off
+figure;
+hold all
+grid on
+plot(t,x1B,t,x4B,t,Iload,'Linewidth',2.0);
+%xlim([0]);
+ylim([-20 20]);
+xlabel('Time');
+ylabel('Voltage,Ampere');
+title({'Bottom Switch Ids, Vds, Ig, Vgs'})
+legend ('IdsB','IdsT','Il','Vgs','Location','best');
+hold off
 

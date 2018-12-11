@@ -49,7 +49,7 @@ for k=3:n
     u2T(k) = u(k) - Vload(k-1);% - (LdcP + LdcN + Lp)*(x1T(k-1) - x1T(k-2))/SampleTime;
     [x1B(k),x7B(k),x4B(k),x3B(k)] = StateSpaceGaNBlock(u1B(k),u2B(k),x1B(k-1),x7B(k-1),x4B(k-1),x3B(k-1),SampleTime);
     [x1T(k),x7T(k),x4T(k),x3T(k)] = StateSpaceGaNBlock(u1T(k),u2T(k),x1T(k-1),x7T(k-1),x4T(k-1),x3T(k-1),SampleTime);
-    Vload(k+1) = Lload*(x1T(k) - x1T(k-1) - x1B(k) + x1B(k-1))/SampleTime + Rload*(x1T(k) - x1B(k));
+    Vload(k+1) = Lload*(x1T(k) - x1T(k-1) - x1T(k) + x1T(k-1))/SampleTime + Rload*(x1T(k) - x1B(k));
     Iload(k) = Iload(k-1) + (((Vload(k))*SampleTime)/Lload);
    
 end
