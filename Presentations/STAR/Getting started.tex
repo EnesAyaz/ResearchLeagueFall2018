@@ -1,0 +1,67 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+
+
+\begin{document}
+
+\begin{gather}
+
+ \begin{bmatrix}  \dot{Id} \\  \dot{Ig}  \\ \dot{Vgs}  \\ \dot{Vds} \end{bmatrix}
+ =
+  \begin{bmatrix}
+   
+   a11 & 0 & 0 & 0 \\
+    0 & a22 & a23 & 0 \\
+     a31 & a32 & 0 & 0 \\
+      a41 & a42 & 0 & 0 \\
+   \end{bmatrix} \begin{bmatrix}  Id \\  Ig  \\ \ Vgs  \\ \ Vds \end{bmatrix} 
+   + \begin{bmatrix}
+   
+    0 & b12 & 0 \\
+    b21 & 0 & 0 \\
+    0 & 0 & b33  \\
+    0 & 0 & b43     
+    \end{bmatrix}  \begin{bmatrix}  U1 \\  U2  \\ \ Ich \end{bmatrix} 
+   
+   
+\end{gather}
+
+
+\begin{gather}
+
+ \begin{bmatrix}  \dot{Ich} \\  \dot{Ig}  \\ \dot{Vgs}  \\ \dot{Vds} \end{bmatrix}
+ =
+  \begin{bmatrix}
+   
+   a11 & a12 & 0 & 0 \\
+    a21& 0 & 0 & 0 \\
+     a31 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 0 \\
+   \end{bmatrix} \begin{bmatrix}  Id \\  Ig  \\ \ Vgs  \\ \ Vds \end{bmatrix} 
+   + \begin{bmatrix}
+   
+    b11 & 0 & 0 \\
+    0 & b22 & b23 \\
+    0 & 0b32& 0  \\
+    0 & 0 & b33     
+    \end{bmatrix}  \begin{bmatrix}  U1 \\  U2  \\ \ Ich \end{bmatrix} 
+   
+   
+\end{gather}
+
+
+
+
+\[ X_k+1 = A.X_k + B.U_k \] 
+
+
+
+
+
+\end{document}
+\documentclass{article}
+
+\usepackage{amsmath}
+

@@ -87,7 +87,7 @@ legend ('Ig','Vgsin','Vgsout');
 
 
 title('Ig and Vgs','FontSize', 30);
-set(gca,'FontSize',20)
+set(gca,'FontSize',30)
 
 suptitle(' Vgs Switching and Ids Positive with Current Biasing','FontSize', 30);
 

@@ -45,7 +45,7 @@ NextVect = zeros(size(3,1));
 %% Input Definition
 u1(t>0)=-3;
 u1(t>=150e-9) = 6;
-u2(t>=0e-9) = -8;
+u2(t>=0e-9) = 10;
 u1(t>=250e-9) = -3;
 % u1(t>=400e-9) = 6;
 % u2(t>=200e-9) = 0;
@@ -115,27 +115,28 @@ grid on;
 subplot(1,2,1);
 
 plot(t,x1,'g','LineWidth',4);
-xlabel('Time(sec)');
-ylabel('Current(A)');
+xlabel('Time(sec)','FontSize', 30);
+ylabel('Current(A)','FontSize', 30);
 yyaxis right;
 
 
 subplot(1,2,1);
 
 plot(t,u2,'b','LineWidth',4);
-xlabel('Time(sec)');
-ylabel('Voltage(V)');
+xlabel('Time(sec)','FontSize', 30);
+ylabel('Voltage(V)','FontSize', 30);
 yyaxis left;
 
-title('Ids and Vds');
+title('Ids and Vds','FontSize', 30);
+set(gca,'FontSize',20)
 
 legend('Ids','Vds');
 
 subplot(1,2,2);
 
 plot(t,x7,'r','LineWidth',4);
-xlabel('Time(sec)');
-ylabel('Current(A)');
+xlabel('Time(sec)','FontSize', 30);
+ylabel('Current(A)','FontSize', 30);
 yyaxis right;
 ylim([-4 5]);
 
@@ -145,16 +146,17 @@ hold on;
 subplot(1,2,2);
 
 plot(t,u1,'LineWidth',4);
-xlabel('Time(sec)');
-ylabel('Voltage(V)');
+xlabel('Time(sec)','FontSize', 30);
+ylabel('Voltage(V)','FontSize', 30);
 ylim([-4 7]);
 yyaxis left;
-title('Ig and Vgs');
+title('Ig and Vgs','FontSize', 30);
+set(gca,'FontSize',20)
 
 legend('Ig','Vgs');
 
 
-suptitle('Vgs Switching and Vds Negative with Voltage Biasing');
+suptitle('Vgs Switching and Vds Negative with Voltage Biasing','FontSize', 30);
 
 
 
