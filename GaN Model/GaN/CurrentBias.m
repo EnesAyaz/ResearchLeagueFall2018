@@ -3,7 +3,7 @@ clear all;
 close all;
 %% Simulation Parameters
 SampleTime = 1e-12; %Time Steps
-StopTime = 1000e-9; %Stop Time
+StopTime = 500e-9; %Stop Time
 fsw = 3e6;
 t = (0 : SampleTime : StopTime);
 t=t(1,1:end-1);
@@ -15,10 +15,10 @@ Rd = (3.6/8) * (0.95*0.82*(1 - (-0.0135*(125 - 25))) * 18.2 / 295);
 [u1B, u1T] = PulseTimer(t,fsw,SampleTime);
 %%
 a=length(t);
-u2CB = linspace(30,0,100) ;%Ids
-u2B1=zeros(1,a-100);
+u2CB = 3*ones(1,50000) ;%Ids
+u2B1=zeros(1,a-50000);
 u2CB=[u2CB u2B1]; % Ids
-% u2CB=zeros(size(t));
+% u2CB=-10*ones(size(t));
 x3B = zeros(size(t)); %Vdsin
 x4B = zeros(size(t)); %Vgsin
 x7B = zeros(size(t)); %Ig
@@ -40,39 +40,52 @@ end
 %%
 figure ;
 
-subplot(2,2,1);
+subplot(1,2,1);
 hold all
 grid on
-plot(t,u2CB','Linewidth',2.0);
-title('Ids')
-legend ('Ids');
-hold off
+plot(t,u2CB','r',t,x8,'--g','Linewidth',3.0);
+ylabel('Current(A)');
+xlabel('Time(sec)');
+ylim([-1 20])
+yyaxis right;
 
 
-subplot(2,2,2);
+subplot(1,2,1);
 hold all
 grid on
-plot(t,x4B,t,x7B,t,u1B,'Linewidth',2.0);
-title('Vgsin,Vgsout and Ig')
-legend ('Vgs','Ig','Vgsout');
-hold off
+plot(t,x3B,'b','Linewidth',3.0);
+ylabel('Voltage(V)');
+xlabel('Time(sec)');
 
-subplot(2,2,3);
+title(' Ids, Ich and Vdsin')
+yyaxis left;
+legend ('Ids','Ich','Vdsin');
+
+
+subplot(1,2,2);
 hold all
 grid on
-plot(t,x3B,'Linewidth',2.0);
-legend ('Vdsin');
-hold off
+plot(t,x7B,'r','Linewidth',3.0);
+ylabel('Current(A)');
+xlabel('Time(sec)');
+yyaxis right;
 
 
 
-subplot(2,2,4);
+
+
+subplot(1,2,2);
 hold all
 grid on
-plot(t,x8,'Linewidth',2.0);
-legend ('Ich');
-hold off
+plot(t,x4B,'b',t,u1B,'g','Linewidth',3.0);
+ylabel('Voltage(V)');
+xlabel('Time(sec)');
+yyaxis left;
+legend ('Ig','Vgsin','Vgsout');
+ylim([-4 7]);
 
-suptitle(' Vgs switching and Ids negative');
+title('Ig and Vgs');
+
+suptitle(' Vgs Switching and Ids Positive with Current Biasing');
 
 

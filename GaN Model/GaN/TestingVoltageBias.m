@@ -43,7 +43,7 @@ B = zeros(size(4,3));
 CurrVect = zeros(size(4,1));
 NextVect = zeros(size(3,1));
 %% Input Definition
-u1(t>50e-9)=6;
+u1(t>0)=-3;
 u1(t>=150e-9) = 6;
 u2(t>=0e-9) = -8;
 u1(t>=250e-9) = -3;
@@ -111,36 +111,51 @@ end
 figure; 
 hold all
 grid on;
-subplot(2,2,1);
 
-plot(t,x1,'LineWidth',3);
-xlabel('Time');
-ylabel('Ampere');
-title('Ids');
+subplot(1,2,1);
 
-subplot(2,2,2);
-
-plot(t,u2,'LineWidth',3);
-xlabel('Time');
-ylabel('voltage');
-title('Vds');
+plot(t,x1,'g','LineWidth',4);
+xlabel('Time(sec)');
+ylabel('Current(A)');
+yyaxis right;
 
 
-subplot(2,2,3);
+subplot(1,2,1);
 
-plot(t,x7,'LineWidth',3);
-xlabel('Time');
-ylabel('Current');
-title('Ig');
+plot(t,u2,'b','LineWidth',4);
+xlabel('Time(sec)');
+ylabel('Voltage(V)');
+yyaxis left;
 
-subplot(2,2,4);
+title('Ids and Vds');
 
-plot(t,u1,'LineWidth',3);
-xlabel('Time');
-ylabel('Voltage');
-title('Vgs');
+legend('Ids','Vds');
+
+subplot(1,2,2);
+
+plot(t,x7,'r','LineWidth',4);
+xlabel('Time(sec)');
+ylabel('Current(A)');
+yyaxis right;
+ylim([-4 5]);
 
 
-suptitle('Vgs Switching and Vds negative');
+hold on;
+
+subplot(1,2,2);
+
+plot(t,u1,'LineWidth',4);
+xlabel('Time(sec)');
+ylabel('Voltage(V)');
+ylim([-4 7]);
+yyaxis left;
+title('Ig and Vgs');
+
+legend('Ig','Vgs');
+
+
+suptitle('Vgs Switching and Vds Negative with Voltage Biasing');
+
+
 
 hold off
